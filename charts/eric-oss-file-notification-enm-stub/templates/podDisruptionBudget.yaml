@@ -1,0 +1,29 @@
+#
+# COPYRIGHT Ericsson 2021
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "eric-oss-file-notification-enm-stub.name" . }}
+  labels:
+    {{- include "eric-oss-file-notification-enm-stub.labels" . | nindent 4 }}
+  annotations:
+    {{- include "eric-oss-file-notification-enm-stub.annotations" . | nindent 4 }}
+spec:
+  minAvailable: {{ template "eric-oss-file-notification-enm-stub.pod-disruption-budget" . }}
+  selector:
+    matchLabels:
+      app: {{ template "eric-oss-file-notification-enm-stub.name" . }}

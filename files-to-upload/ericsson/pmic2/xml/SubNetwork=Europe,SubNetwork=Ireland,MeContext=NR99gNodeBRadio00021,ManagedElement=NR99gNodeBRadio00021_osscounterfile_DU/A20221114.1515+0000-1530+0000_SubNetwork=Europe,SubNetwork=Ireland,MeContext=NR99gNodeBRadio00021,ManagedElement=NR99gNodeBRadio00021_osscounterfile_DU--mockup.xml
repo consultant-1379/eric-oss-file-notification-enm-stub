@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="MeasDataCollection.xsl"?>
+<measCollecFile xmlns="http://www.3gpp.org/ftp/specs/archive/32_series/32.435#measCollec">
+    <fileHeader fileFormatVersion="32.435 V10.0" vendorName="Ericsson AB">
+        <fileSender localDn="SubNetwork=Europe,SubNetwork=Ireland,MeContext=NR99gNodeBRadio00021,ManagedElement=NR99gNodeBRadio00021" elementType="OSS"/>
+        <measCollec beginTime="2022-11-14T15:15:00+00:00"/>
+    </fileHeader>
+    <measData>
+        <managedElement localDn="SubNetwork=Europe,SubNetwork=Ireland,MeContext=NR99gNodeBRadio00021,ManagedElement=NR99gNodeBRadio00021" userLabel="NR99gNodeBRadio00021" swVersion="CXP2020013/15_R37A02"/>
+        <measInfo>
+            <granPeriod duration="PT900S" endTime="2022-11-14T15:30:00+00:00"/>
+            <repPeriod duration="PT900S"/>
+            <measType p="1">pmEbsDuExampleCounter</measType>
+            <measValue measObjLdn="ManagedElement=NR99gNodeBRadio00021,GNBDUFunction=1">
+                <r p="1">107</r>
+            </measValue>
+        </measInfo>
+        <measInfo>
+            <granPeriod duration="PT900S" endTime="2022-11-14T15:30:00+00:00"/>
+            <repPeriod duration="PT900S"/>
+            <measType p="1">pmEbsMacVolDlDrb_sst1sd1</measType>
+            <measType p="2">pmEbsMacTimeDlDrb_sst1sd1</measType>
+            <measType p="3">pmEbsMacVolUlResUe_sst1sd1</measType>
+            <measType p="4">pmEbsMacTimeUlResUe_sst1sd1</measType>
+            <measValue measObjLdn="ManagedElement=NR99gNodeBRadio00021,GNBDUFunction=1,NRCellDU=NR99gNodeBRadio00021-1">
+                <r p="1">110702</r>
+                <r p="2">10962</r>
+                <r p="3">2187000</r>
+                <r p="4">11882</r>
+            </measValue>
+            <measValue measObjLdn="ManagedElement=NR99gNodeBRadio00021,GNBDUFunction=1,NRCellDU=NR99gNodeBRadio00021-2">
+                <r p="1">110702</r>
+                <r p="2">10962</r>
+                <r p="3">2187000</r>
+                <r p="4">11882</r>
+            </measValue>
+            <measValue measObjLdn="ManagedElement=NR99gNodeBRadio00021,GNBDUFunction=1,NRCellDU=NR99gNodeBRadio00021-3">
+                <r p="1">110702</r>
+                <r p="2">10962</r>
+                <r p="3">2187000</r>
+                <r p="4">11882</r>
+            </measValue>
+        </measInfo>
+    </measData>
+    <fileFooter>
+        <measCollec endTime="2022-11-14T15:30:00+00:00"/>
+    </fileFooter>
+</measCollecFile>

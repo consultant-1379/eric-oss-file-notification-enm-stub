@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ COPYRIGHT Ericsson 2021
+ ~
+ ~
+ ~
+ ~ The copyright to the computer program(s) herein is the property of
+ ~
+ ~ Ericsson Inc. The programs may be used and/or copied only with written
+ ~
+ ~ permission from Ericsson Inc. or in accordance with the terms and
+ ~
+ ~ conditions stipulated in the agreement/contract under which the
+ ~
+ ~ program(s) have been supplied.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<!DOCTYPE module PUBLIC
+  "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+  "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+  <property name="fileExtensions" value="java, xml, properties"/>
+  <property name="charset" value="UTF-8"/>
+  <property name="severity" value="error"/>
+
+  <module name="SuppressionFilter">
+    <property name="file" value="${checkstyle.suppressions.file}" default="/enm/checkstyle-suppressions.xml"/>
+  </module>
+
+  <module name="FileTabCharacter"/>
+  <module name="JavadocPackage"/>
+
+  <module name="RegexpSingleline">
+    <property name="format" value="NOPMD"/>
+    <property name="ignoreCase" value="true"/>
+    <property name="message" value="Use of NOPMD prohibited"/>
+  </module>
+
+  <module name="RegexpSingleline">
+    <property name="format" value="(@(version)|\(non-Javadoc\)|@(author\s))"/>
+    <property name="ignoreCase" value="true"/>
+    <property name="message" value="Unmaintainable Javadoc tags: @version, (non-Javadoc), @author"/>
+  </module>
+
+  <module name="RegexpSingleline">
+    <property name="format" value="Auto-generated method stub"/>
+    <property name="message" value="IDE-generated TODO - Auto-generated method stub"/>
+  </module>
+
+  <module name="RegexpMultiline">
+    <property name="severity" value="${checkstyle.NonUnixLineSeparator.severity}" default="ignore"/>
+    <property name="format" value="\r"/>
+    <property name="message" value="Non-Unix line separator"/>
+  </module>
+
+  <module name="RegexpSingleline">
+    <property name="severity" value="${checkstyle.NoTrailingWhitespace.severity}" default="error"/>
+    <property name="format" value="\s+$"/>
+    <property name="message" value="Line has trailing whitespace"/>
+  </module>
+
+  <!-- Prohibit consecutive empty lines (except the lines after package/import) -->
+  <module name="RegexpMultiline">
+    <property name="format" value="\r?\n *(?!package )(?!import )[^\n]+(\r?\n){3,}"/>
+    <property name="message" value="Two or more consecutive empty lines"/>
+  </module>
+
+  <module name="RegexpMultiline">
+    <property name="format" value="(\r?\n){2}\s+\}[^\n]{0,150}\r?\n"/>
+    <property name="message" value="Empty line before '}'"/>
+  </module>
+
+  <!-- Prohibit empty line after '{' in methods and nested elements in classes -->
+  <module name="RegexpMultiline">
+    <property name="format" value="\r?\n\s+[^\n]{1,150}\{(\r?\n){2}"/>
+    <property name="message" value="Empty line after a line that ends with '{'"/>
+  </module>
+
+  <module name="NewlineAtEndOfFile">
+    <property name="severity" value="${checkstyle.NewlineAtEndOfFile.severity}" default="ignore"/>
+    <property name="lineSeparator" value="${checkstyle.NewlineAtEndOfFile.lineSeparator}" default="lf_cr_crlf"/>
+  </module>
+
+  <module name="UniqueProperties"/>
+
+  <module name="SuppressWarningsFilter"/>
+
+  <module name="LineLength">
+    <property name="max" value="150"/>
+    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+  </module>
+
+  <module name="TreeWalker">
+
+    <module name="RegexpSinglelineJava">
+      <property name="format" value="^(\s|\*)*\s+COPYRIGHT\s+Ericsson\s+[0-9]+\s*$"/>
+      <property name="minimum" value="1"/>
+      <property name="maximum" value="1"/>
+      <property name="message" value="Missing copyright header"/>
+    </module>
+    <module name="IllegalTokenText">
+      <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
+      <property name="format" value="\\u00(08|09|0(a|A)|0(c|C)|0(d|D)|22|27|5(C|c))|\\(0(10|11|12|14|15|42|47)|134)"/>
+      <property name="message" value="Avoid using corresponding octal or Unicode escape."/>
+    </module>
+    <module name="AvoidEscapedUnicodeCharacters">
+      <property name="allowEscapesForControlCharacters" value="true"/>
+      <property name="allowByTailComment" value="true"/>
+      <property name="allowNonPrintableEscapes" value="true"/>
+    </module>
+
+    <module name="SuppressWarningsHolder"/>
+
+    <module name="NoLineWrap"/>
+
+    <module name="EmptyLineSeparator">
+      <property name="allowNoEmptyLineBetweenFields" value="true"/>
+    </module>
+
+    <module name="WhitespaceAfter"/>
+
+    <module name="NoWhitespaceAfter">
+      <property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS"/>
+      <property name="allowLineBreaks" value="true"/>
+      <property name="severity" value="error"/>
+    </module>
+
+    <module name="NoWhitespaceBefore">
+      <property name="tokens" value="SEMI, DOT, POST_DEC, POST_INC"/>
+      <property name="allowLineBreaks" value="true"/>
+      <property name="severity" value="error"/>
+    </module>
+
+    <module name="WhitespaceAround">
+      <property name="allowEmptyConstructors" value="true"/>
+      <property name="allowEmptyMethods" value="true"/>
+      <property name="allowEmptyTypes" value="true"/>
+      <property name="allowEmptyLoops" value="true"/>
+      <message key="ws.notFollowed"
+        value="WhitespaceAround: ''{0}'' is not followed by whitespace. Empty blocks may only be represented as '{}' when not part of a multi-block statement."/>
+      <message key="ws.notPreceded" value="WhitespaceAround: ''{0}'' is not preceded with whitespace."/>
+    </module>
+
+    <module name="Indentation">
+      <property name="basicOffset" value="4"/>
+      <property name="braceAdjustment" value="0"/>
+      <property name="caseIndent" value="4"/>
+      <property name="throwsIndent" value="8"/>
+      <property name="lineWrappingIndentation" value="8"/>
+      <property name="arrayInitIndent" value="4"/>
+      <property name="forceStrictCondition" value="false"/>
+    </module>
+
+    <module name="SeparatorWrap">
+      <property name="tokens" value="DOT"/>
+      <property name="option" value="nl"/>
+    </module>
+    <module name="SeparatorWrap">
+      <property name="tokens" value="COMMA"/>
+      <property name="option" value="EOL"/>
+    </module>
+
+    <module name="OperatorWrap">
+      <property name="option" value="NL"/>
+      <property name="tokens"
+        value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR "/>
+    </module>
+    <module name="AnnotationLocation">
+      <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF"/>
+    </module>
+    <module name="AnnotationLocation">
+      <property name="tokens" value="VARIABLE_DEF"/>
+      <property name="allowSamelineMultipleAnnotations" value="true"/>
+    </module>
+
+    <module name="EmptyBlock">
+      <property name="option" value="text"/>
+    </module>
+    <module name="EmptyCatchBlock">
+      <property name="exceptionVariableName" value="expected|ignore"/>
+    </module>
+
+    <module name="LeftCurly"></module>
+    <module name="RightCurly"/>
+    <module name="RightCurly">
+      <property name="option" value="alone"/>
+      <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT"/>
+    </module>
+
+    <module name="NeedBraces"/>
+    <module name="AvoidNestedBlocks">
+      <property name="allowInSwitchCase" value="true"/>
+    </module>
+
+    <module name="MissingOverride"/>
+    <module name="MissingDeprecated"/>
+
+    <module name="PackageAnnotation"/>
+    <module name="PackageDeclaration"/>
+
+    <module name="ImportOrder">
+      <property name="groups" value="/^javax?\./,org,com"/>
+      <property name="ordered" value="true"/>
+      <property name="separated" value="true"/>
+      <property name="option" value="top"/>
+    </module>
+
+    <module name="AvoidStarImport">
+      <property name="severity" value="${checkstyle.AvoidStarImport.severity}" default="ignore"/>
+      <property name="allowClassImports" value="false"/>
+      <property name="allowStaticMemberImports" value="false"/>
+    </module>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+    <module name="IllegalImport">
+      <property name="severity" value="${checkstyle.IllegalImport.severity}" default="ignore"/>
+      <property name="illegalPkgs" value="${checkstyle.IllegalImport.illegalPkgs}" default="sun"/>
+    </module>
+
+    <module name="OuterTypeFilename"/>
+    <module name="OuterTypeNumber"/>
+    <module name="OneTopLevelClass"/>
+    <module name="FinalClass"/>
+    <module name="InterfaceIsType"/>
+
+    <module name="MutableException"/>
+    <module name="InnerTypeLast"/>
+    <module name="DesignForExtension">
+      <property name="severity" value="${checkstyle.DesignForExtension.severity}" default="ignore"/>
+    </module>
+    <module name="HideUtilityClassConstructor"/>
+
+    <module name="EqualsAvoidNull"/>
+    <module name="MissingSwitchDefault">
+      <property name="severity" value="${checkstyle.MissingSwitchDefault.severity}" default="warning"/>
+    </module>
+    <module name="ModifiedControlVariable"/>
+    <module name="MultipleStringLiterals">
+      <property name="allowedDuplicates" value="3"/>
+      <property name="ignoreStringsRegexp" value='^(("")|(".")|(":")|(", ")|("; ")|("unchecked"))$'/>
+    </module>
+
+    <module name="ExplicitInitialization"/>
+    <module name="UnnecessaryParentheses"/>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="NoFinalizer"/>
+    <module name="SuperFinalize"/>
+    <module name="CovariantEquals"/>
+    <module name="EmptyStatement"/>
+    <module name="EqualsHashCode"/>
+    <module name="FinalLocalVariable">
+      <property name="tokens" value="VARIABLE_DEF,PARAMETER_DEF"/>
+      <property name="validateEnhancedForLoopVariable" value="true"/>
+    </module>
+    <module name="StringLiteralEquality"/>
+    <module name="ModifierOrder">
+      <message key="mod.order"
+        value="''{0}'' modifier out of order with the JLS suggestions. The prescribed order is: public, protected, private, abstract, static, final, transient, volatile, synchronized, native, strictfp."/>
+    </module>
+    <module name="RedundantModifier"/>
+    <module name="GenericWhitespace">
+      <message key="ws.followed" value="GenericWhitespace ''{0}'' is followed by whitespace."/>
+      <message key="ws.preceded" value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
+      <message key="ws.illegalFollow" value="GenericWhitespace ''{0}'' should be followed by whitespace."/>
+      <message key="ws.notPreceded" value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
+    </module>
+
+    <module name="EmptyForInitializerPad"/>
+    <module name="EmptyForIteratorPad"/>
+    <module name="MethodParamPad"/>
+    <module name="ParenPad"/>
+    <module name="TypecastParenPad"/>
+    <module name="DeclarationOrder">
+      <message key="declaration.order.access"
+        value="Variable access definition in wrong order. The parts of a Class should appear in the following order: Static variables, Instance variables (first public, then protected, then package level, and then private), Constructors, Methods, Types."/>
+    </module>
+
+    <module name="OverloadMethodsDeclarationOrder"/>
+    <module name="VariableDeclarationUsageDistance">
+      <property name="severity" value="${checkstyle.VariableDeclarationUsageDistance.severity}" default="info"/>
+      <property name="allowedDistance" value="3"/>
+      <property name="validateBetweenScopes" value="${checkstyle.VariableDeclarationUsageDistance.validateBetweenScopes}" default="false"/>
+      <property name="ignoreFinal" value="true"/>
+    </module>
+
+    <module name="MultipleVariableDeclarations"/>
+    <module name="HiddenField">
+      <property name="tokens" value="VARIABLE_DEF"/>
+    </module>
+    <module name="OneStatementPerLine"/>
+    <module name="FallThrough"/>
+    <module name="DefaultComesLast"/>
+    <module name="UpperEll"/>
+    <module name="ArrayTypeStyle"/>
+    <module name="ParameterAssignment">
+      <property name="severity" value="${checkstyle.ParameterAssignment.severity}" default="info"/>
+    </module>
+    <module name="ParameterNumber">
+      <property name="severity" value="${checkstyle.ParameterNumber.severity}" default="info"/>
+      <property name="ignoreOverriddenMethods" value="true"/>
+      <property name="max" value="${checkstyle.ParameterNumber.max}" default="6"/>
+    </module>
+    <module name="IllegalInstantiation">
+      <property name="classes" value="java.lang.Boolean"/>
+    </module>
+
+    <module name="ParameterName">
+      <property name="format" value="^(?!arg[0-9])[a-z][a-zA-Z0-9]*$"/>
+      <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+    <module name="StaticVariableName"/>
+    <module name="TypeName">
+      <message key="name.invalidPattern" value="Type name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+    <module name="ConstantName">
+      <property name="severity" value="${checkstyle.ConstantName.severity}" default="info"/>
+      <message key="name.invalidPattern" value="Name ''{0}'' should match pattern ''{1}''."/>
+      <property name="applyToPrivate" value="${checkstyle.ConstantName.applyToPrivate}" default="true"/>
+      <property name="applyToPackage" value="${checkstyle.ConstantName.applyToPackage}" default="true"/>
+      <property name="applyToProtected" value="${checkstyle.ConstantName.applyToProtected}" default="true"/>
+      <property name="format" value="^log(ger)?|[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+    </module>
+    <module name="LocalFinalVariableName"/>
+    <module name="LocalVariableName">
+      <property name="tokens" value="VARIABLE_DEF"/>
+      <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+      <property name="allowOneCharVarInForLoop" value="true"/>
+      <message key="name.invalidPattern" value="Local variable name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+
+    <module name="MemberName">
+      <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+      <message key="name.invalidPattern" value="Member name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+    <module name="MethodName">
+      <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
+      <message key="name.invalidPattern" value="Method name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+    <module name="ClassTypeParameterName">
+      <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+      <message key="name.invalidPattern" value="Class type name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+
+    <module name="MethodTypeParameterName">
+      <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+      <message key="name.invalidPattern" value="Method type name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+    <module name="PackageName">
+      <property name="format" value="^[a-z]+(\.[a-z][a-z]*)*$"/>
+      <message key="name.invalidPattern" value="Package name ''{0}'' must match pattern ''{1}''."/>
+    </module>
+    <module name="AbbreviationAsWordInName">
+      <property name="severity" value="${checkstyle.AbbreviationAsWordInName.severity}" default="warning"/>
+      <property name="ignoreFinal" value="false"/>
+      <property name="allowedAbbreviationLength" value="1"/>
+      <property name="allowedAbbreviations" value="IT"/>
+    </module>
+
+    <module name="CommentsIndentation"/>
+
+    <!-- JavaDoc specific rules.
+      The scope is treated inclusively (as javadoc does):
+      'package' means all 'package', 'protected' and 'public' methods/fields/classes.
+      The valid options are: nothing, public, protected, package, private, anoninner.
+    -->
+
+    <module name="JavadocType">
+      <property name="scope" value="package"/>
+    </module>
+
+    <module name="JavadocMethod">
+      <property name="severity" value="ignore" default="ignore"/>
+      <property name="scope" value="protected"/>
+      <property name="allowedAnnotations" value="Override, Test"/>
+    </module>
+
+    <module name="JavadocVariable">
+      <property name="severity" value="ignore" default="ignore"/>
+      <property name="scope" value="protected"/>
+    </module>
+
+    <module name="JavadocStyle">
+      <property name="scope" value="protected"/>
+      <property name="checkFirstSentence" value="true"/>
+      <property name="checkEmptyJavadoc" value="true"/>
+      <property name="checkHtml" value="true"/>
+      <property name="tokens" value="INTERFACE_DEF, CLASS_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
+    </module>
+
+    <module name="SummaryJavadocCheck">
+      <property name="forbiddenSummaryFragments" value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )"/>
+    </module>
+
+    <module name="AtclauseOrder">
+      <property name="tagOrder" value="@param, @return, @throws, @deprecated, @see, @since"/>
+      <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
+    </module>
+
+    <module name="NonEmptyAtclauseDescription"/>
+    <module name="JavadocTagContinuationIndentation"/>
+    <module name="SingleLineJavadoc"/>
+
+    <module name="JavadocParagraph">
+      <property name="severity" value="${checkstyle.JavadocParagraph.severity}" default="ignore"/>
+    </module>
+
+  </module>
+
+</module>
+

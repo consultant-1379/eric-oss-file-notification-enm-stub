@@ -1,0 +1,371 @@
+#
+# COPYRIGHT Ericsson 2021
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+apiVersion: v1
+data:
+  spring_http_port: {{ .Values.service.port | quote }}
+  spring_ssl_enabled: {{ .Values.configMap.spring.ssl.enabled | quote }}
+  spring_ssl_port: {{ .Values.configMap.spring.ssl.port | quote }}
+  spring_ssl_keyStoreType: {{ .Values.configMap.spring.ssl.keyStoreType | quote }}
+  spring_ssl_keyStoreLocation: {{ .Values.configMap.spring.ssl.keyStoreLocation | quote }}
+  spring_ssl_keyStorePassword: {{ .Values.configMap.spring.ssl.keyStorePassword | quote }}
+  spring_ssl_keyAlias: {{ .Values.configMap.spring.ssl.keyAlias | quote }}
+  spring_sftp_host: {{ .Values.configMap.spring.sftp.host | quote }}
+  spring_sftp_port: {{ .Values.configMap.spring.sftp.port | quote }}
+  spring_sftp_user: {{ .Values.configMap.spring.sftp.user | quote }}
+  spring_sftp_password: {{ .Values.configMap.spring.sftp.password | quote }}
+  spring_sftp_permissions: {{ .Values.configMap.spring.sftp.permissions | quote }}
+  spring_sftp_numberOfNodes: {{ .Values.configMap.spring.sftp.numberOfNodes | quote }}
+  spring_sftp_numberOfNodes_pmEvent5g: {{ .Values.configMap.spring.sftp.numberOfNodes.pmEvent5g | quote }}
+  spring_sftp_numberOfNodes_pmEvent4g: {{ .Values.configMap.spring.sftp.numberOfNodes.pmEvent4g | quote }}
+  spring_sftp_numberOfNodes_fileTrans: {{ .Values.configMap.spring.sftp.numberOfNodes.fileTrans | quote }}
+  spring_sftp_numberOfNodes_fileTransEbs: {{ .Values.configMap.spring.sftp.numberOfNodes.fileTransEbs | quote }}
+  spring_sftp_numberOfNodes_fileTransCore: {{ .Values.configMap.spring.sftp.numberOfNodes.fileTransCore | quote }}
+  spring_sftp_ropPeriodMinutes: {{ .Values.configMap.spring.sftp.ropPeriodMinutes | quote }}
+  spring_sftp_retentionPeriodMinutes: {{ .Values.configMap.spring.sftp.retentionPeriodMinutes | quote }}
+  spring_sftp_remote_basedirectory: {{ .Values.configMap.spring.sftp.remote.baseDirectory | quote }}
+  spring_sftp_connection_timeoutInMs: {{ .Values.configMap.spring.sftp.connection.timeoutInMs | quote }}
+  spring_sftp_connection_retryCountMax_atStartup: {{ .Values.configMap.spring.sftp.connection.retryCountMax.atStartup | quote }}
+  spring_sftp_connection_retryCountMax_running: {{ .Values.configMap.spring.sftp.connection.retryCountMax.running | quote }}
+  spring_manual_mode_generate_retryCountMax: {{ .Values.configMap.spring.manualModeGenerate.retryCountMax | quote }}
+  spring_manual_mode_generate_backoffInMs: {{ .Values.configMap.spring.manualModeGenerate.backoffInMs | quote }}
+
+  application.properties: |
+    management.endpoint.metrics.enabled=true
+    management.endpoints.web.exposure.include=*
+    management.endpoint.prometheus.enabled=true
+    management.metrics.export.prometheus.enabled=true
+    management.metrics.web.server.auto-time-requests=true
+kind: ConfigMap
+metadata:
+  name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+  labels:
+  {{- include "eric-oss-file-notification-enm-stub.labels" . | nindent 4 }}
+  annotations:
+  {{- include "eric-oss-file-notification-enm-stub.annotations" . | nindent 4 }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "eric-oss-file-notification-enm-stub.fullname" . }}
+  labels:
+{{- include "eric-oss-file-notification-enm-stub.labels" . | nindent 4 }}
+  annotations:
+{{- include "eric-oss-file-notification-enm-stub.annotations" . | nindent 4 }}
+spec:
+{{- if not .Values.autoScaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "eric-oss-file-notification-enm-stub.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: {{ .Values.updateStrategy.type | quote }}
+    {{- if and (eq .Values.updateStrategy.type "RollingUpdate") .Values.updateStrategy.rollingUpdate }}
+    rollingUpdate:
+      maxUnavailable: {{ .Values.updateStrategy.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.updateStrategy.rollingUpdate.maxSurge }}
+    {{- end }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "eric-oss-file-notification-enm-stub.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ include "eric-oss-file-notification-enm-stub.version" . }}
+      annotations:
+{{- include "eric-oss-file-notification-enm-stub.prometheus" . | nindent 8 }}
+{{- include "eric-oss-file-notification-enm-stub.product-info" . | indent 8 }}
+{{- include "eric-oss-file-notification-enm-stub.config-annotations" . | indent 8 }}
+    spec:
+      {{- if include "eric-oss-file-notification-enm-stub.pullSecret" . }}
+      imagePullSecrets:
+        - name: {{ include "eric-oss-file-notification-enm-stub.pullSecret" . | quote}}
+      {{- end }}
+      serviceAccountName: {{ template "eric-oss-file-notification-enm-stub.fullname" . }}
+      securityContext:
+        fsGroup: {{ include "eric-oss-file-notification-enm-stub.fsGroup.coordinated" . }}
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+      containers:
+        - name: eric-oss-file-notification-enm-stub
+          image: {{ template "eric-oss-file-notification-enm-stub.mainImagePath" . }}
+          imagePullPolicy: {{ template "eric-oss-file-notification-enm-stub.registryImagePullPolicy" . }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - all
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp-volume
+            - name: config-volume
+              mountPath: /config
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "initialDelaySeconds") }}
+            {{- end }}
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "failureThreshold") }}
+            {{- end }}
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "periodSeconds") }}
+            {{- end }}
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "livenessProbe" "timeoutSeconds") }}
+            {{- end }}
+            httpGet:
+              path: /actuator/health
+              port: http
+          readinessProbe:
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "initialDelaySeconds") }}
+            {{- end }}
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "failureThreshold") }}
+            {{- end }}
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "periodSeconds") }}
+            {{- end }}
+            {{- if (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "eric-oss-file-notification-enm-stub" "readinessProbe" "timeoutSeconds") }}
+            {{- end }}
+            httpGet:
+              path: /actuator/health
+              port: http
+          env:
+          - name: SPRING_HTTP_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_http_port
+          - name: SPRING_SSL_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_ssl_enabled
+          - name: SPRING_SSL_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_ssl_port
+          - name: SPRING_SSL_KEYSTORETYPE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_ssl_keyStoreType
+          - name: SPRING_SSL_KEYSTORELOCATION
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_ssl_keyStoreLocation
+          - name: SPRING_SSL_KEYSTOREPASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_ssl_keyStorePassword
+          - name: SPRING_SSL_KEYALIAS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_ssl_keyAlias
+          - name: SPRING_SFTP_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_host
+          - name: SPRING_SFTP_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_port
+          - name: SPRING_SFTP_USER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_user
+          - name: SPRING_SFTP_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_password
+          - name: SPRING_SFTP_NUMBER_OF_NODES_PM_EVENT_5G
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_numberOfNodes_pmEvent5g
+          - name: SPRING_SFTP_NUMBER_OF_NODES_PM_EVENT_4G
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_numberOfNodes_pmEvent4g
+          - name: SPRING_SFTP_NUMBER_OF_NODES_FILE_TRANS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_numberOfNodes_fileTrans
+          - name: SPRING_SFTP_NUMBER_OF_NODES_FILE_TRANS_EBS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_numberOfNodes_fileTransEbs
+          - name: SPRING_SFTP_NUMBER_OF_NODES_FILE_TRANS_CORE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_numberOfNodes_fileTransCore
+          - name: SPRING_SFTP_ROP_PERIOD_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_ropPeriodMinutes
+          - name: SPRING_SFTP_RETENTION_PERIOD_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_retentionPeriodMinutes
+          - name: SPRING_SFTP_PERMISSIONS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_permissions
+          - name: SPRING_SFTP_REMOTE_BASEDIRECTORY
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_remote_basedirectory
+          - name: SPRING_SFTP_CONNECTION_TIMEOUTINMS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_connection_timeoutInMs
+          - name: SPRING_SFTP_CONNECTION_RETRYCOUNTMAX_ATSTARTUP
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_connection_retryCountMax_atStartup
+          - name: SPRING_SFTP_CONNECTION_RETRYCOUNTMAX_RUNNING
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_sftp_connection_retryCountMax_running
+          - name: SPRING_MANUAL_MODE_GENERATE_RETRY_COUNT_MAX
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_manual_mode_generate_retryCountMax
+          - name: SPRING_MANUAL_MODE_GENERATE_BACKOFF_IN_MS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "eric-oss-file-notification-enm-stub.name" . }}-configmap
+                key: spring_manual_mode_generate_backoffInMs
+          - name: TZ
+            value: {{ template "eric-oss-file-notification-enm-stub.timezone" . }}
+      {{- if .Values.global }}
+        {{- if .Values.global.security }}
+          {{- if .Values.global.security.tls }}
+            {{- if .Values.global.security.tls.enabled }}
+          - name: CONNECT_MODE
+            value: "tls"
+            {{- if (eq .Values.service.endpoints.chassisapi.tls.enforced "required") }}
+          - name: TLS_MODE
+            value: "only_tls"
+            {{- if (eq .Values.service.endpoints.chassisapi.tls.verifyClientCertificate "required") }}
+          - name: TLS_CA
+            value: "ca_path"
+            {{- end }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+          resources:
+            requests:
+            {{- if (index .Values "resources" "eric-oss-file-notification-enm-stub" "requests" "cpu") }}
+              cpu: {{ (index .Values "resources" "eric-oss-file-notification-enm-stub" "requests" "cpu" | quote) }}
+            {{- end }}
+            {{- if (index .Values "resources" "eric-oss-file-notification-enm-stub" "requests" "memory") }}
+              memory: {{ (index .Values "resources" "eric-oss-file-notification-enm-stub" "requests" "memory" | quote) }}
+            {{- end }}
+            {{- if (index .Values "resources" "eric-oss-file-notification-enm-stub" "requests" "ephemeral-storage") }}
+            {{ println "  ephemeral-storage:" (index .Values "resources" "eric-oss-file-notification-enm-stub" "requests" "ephemeral-storage" | quote) }}
+            {{- end }}
+            limits:
+            {{- if (index .Values "resources" "eric-oss-file-notification-enm-stub" "limits" "cpu") }}
+              cpu: {{ (index .Values "resources" "eric-oss-file-notification-enm-stub" "limits" "cpu" | quote) }}
+            {{- end }}
+            {{- if (index .Values "resources" "eric-oss-file-notification-enm-stub" "limits" "memory") }}
+              memory: {{ (index .Values "resources" "eric-oss-file-notification-enm-stub" "limits" "memory" | quote) }}
+            {{- end }}
+            {{- if (index .Values "resources" "eric-oss-file-notification-enm-stub" "limits" "ephemeral-storage") }}
+            {{ println "  ephemeral-storage:" (index .Values "resources" "eric-oss-file-notification-enm-stub" "limits" "ephemeral-storage" | quote) }}
+            {{- end }}
+      {{- if (index .Values "podPriority" "eric-oss-file-notification-enm-stub" "priorityClassName") }}
+      priorityClassName: {{ (index .Values "podPriority" "eric-oss-file-notification-enm-stub" "priorityClassName") }}
+      {{- end }}
+      nodeSelector: {{ include "eric-oss-file-notification-enm-stub.nodeSelector" . | nindent 6 -}}
+
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds:
+        {{- include "eric-oss-file-notification-enm-stub.terminationGracePeriodSeconds" . | nindent 8 }}
+      {{- end }}
+
+      {{- if .Values.tolerations }}
+      tolerations:
+        {{- include "eric-oss-file-notification-enm-stub.tolerations" . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.topologySpreadConstraints.deployment }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- if eq .Values.affinity.podAntiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ include "eric-oss-file-notification-enm-stub.name" . }}
+            topologyKey: "kubernetes.io/hostname"
+      {{- else if eq .Values.affinity.podAntiAffinity  "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ include "eric-oss-file-notification-enm-stub.name" . }}
+              topologyKey: "kubernetes.io/hostname"
+      {{- end }}

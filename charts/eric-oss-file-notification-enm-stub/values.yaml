@@ -1,0 +1,192 @@
+#
+# COPYRIGHT Ericsson 2021
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+# Default values for eric-oss-file-notification-enm-stub.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#global:
+#  timezone: UTC
+#  registry:
+#    url: armdocker.rnd.ericsson.se
+#  #Secret must be manually created in the namespace, no default value
+#  pullSecret: eric-adp-example-secret
+#  fsGroup:
+#    manual: 10000
+#    namespace: true
+#  # The IP family the service belongs to when service.type is set to ClusterIP.
+#  # Options are: IPv4, IPv6
+#  internalIPFamily:
+#  security:
+#    policyBinding:
+#      create: true
+#    policyReferenceMap:
+#      default-restricted-security-policy: "<restricted security policy at customer deployment>"
+#    tls:
+#      enabled: true
+#
+
+replicaCount: 1
+
+podDisruptionBudget:
+  # Minimum number/percentage of Pods that must remain available during the planned disruption.
+  # Value can be expressed as an integer or as a percentage. When specified as a percentage of the Pods,
+  # if it does not map to an exact number, Kubernetes rounds up to the nearest integer.
+  # minAvailable: 2 # example value for 2 pods defined as integer
+  minAvailable: "40%"
+
+updateStrategy:
+ type: RollingUpdate
+ rollingUpdate:
+   maxSurge: 1
+   maxUnavailable: 0
+
+#Empty labels list for application deployment engineer to add more labels (In Compliance with DR-D1121-068).
+labels: {}
+
+imageCredentials:
+  eric-oss-file-notification-enm-stub:
+
+    repoPath: # see default in eric-product-info.yaml
+    registry: {}
+      # overrides global registry url
+      # url:
+      #- Secret must be manually created in the namespace, no default value
+      # pullSecret: REPO_SECRET
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+annotations: {}
+
+service:
+  type: ClusterIP
+  port: 8080    # Changed from 80 to 8080 and spring application is hosted on 8080
+  endpoints:
+    chassisapi:
+      tls:
+        enforced: required
+        verifyClientCertificate: required
+
+ingress:
+  enabled: false
+  ingressClass: OAM-IngressClass
+  hosts:
+    - host: chart-example.local
+      paths: [/]
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+eric-pm-server:
+  rbac:
+    appMonitoring:
+      enabled: true
+
+prometheus:
+  path: /actuator/prometheus
+  scrape: true
+
+terminationGracePeriodSeconds: 30
+
+resources:
+  eric-oss-file-notification-enm-stub:
+    requests:
+      memory: 256Mi
+      cpu: 125m
+      ephemeral-storage: ""
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+      ephemeral-storage: ""
+
+autoScaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+topologySpreadConstraints:
+  deployment: []
+  test: []
+tolerations: []
+affinity:
+  podAntiAffinity: "soft"
+
+podPriority:
+  eric-oss-file-notification-enm-stub:
+    priorityClassName: ""
+
+probes:
+  eric-oss-file-notification-enm-stub:
+    livenessProbe:
+      failureThreshold: 6
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+    readinessProbe:
+      failureThreshold: 6
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+
+configMap:
+  spring:
+    ssl:
+      enabled: true
+      port: 8081
+      keyStoreType: PKCS12
+      keyStoreLocation: classpath:keystore/fnsStubCertificate.p12
+      keyStorePassword: changeit
+      keyAlias: fnsStub
+    sftp:
+      host: sftp-server
+      port: 9023
+      user: demo
+      password: demo
+      permissions: "0755"
+      numberOfNodes:
+        fileTrans: 100
+        fileTransEbs: 0
+        fileTransCore: 0
+        pmEvent5g: 100
+        pmEvent4g: 0 # keep it as zero, no 4g files present in the repo
+      ropPeriodMinutes: 15 # Renaming only works for 15, so this has to be 15
+      retentionPeriodMinutes: 135 # 2 hours 15 min || 15 mins extra to allow safety net for processing left over files
+      remote:
+        baseDirectory: "/sftp/"
+      connection:
+        timeoutInMs: 10000
+        retryCountMax:
+          atStartup: "2147483647"
+          running: 5
+    manualModeGenerate:
+      retryCountMax: 30
+      backoffInMs: 10000  # 30 times * 10 Sec = 5 minute wait.
+

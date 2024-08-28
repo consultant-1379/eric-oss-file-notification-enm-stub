@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="MeasDataCollection.xsl"?>
+<measCollecFile xmlns="http://www.3gpp.org/ftp/specs/archive/32_series/32.435#measCollec">
+    <fileHeader fileFormatVersion="32.435 V10.0" vendorName="Ericsson AB">
+        <fileSender localDn="SubNetwork=RAN,MeContext=GNB_BNE502,ManagedElement=GNB_BNE502" elementType="OSS"/>
+        <measCollec beginTime="2022-06-21T14:00:00+02:00"/>
+    </fileHeader>
+    <measData>
+        <managedElement localDn="SubNetwork=RAN,MeContext=GNB_BNE502,ManagedElement=GNB_BNE502" userLabel="GNB_BNE502" swVersion="CXP9024418/15_R48E15"/>
+        <measInfo>
+            <granPeriod duration="PT900S" endTime="2022-06-21T14:15:00+02:00"/>
+            <repPeriod duration="PT900S"/>
+            <measType p="1">pmEbsActiveUeDlMax</measType>
+            <measType p="2">pmEbsActiveUeDlSamp</measType>
+            <measType p="3">pmEbsActiveUeDlSum</measType>
+            <measType p="4">pmEbsActiveUeDlTrueSamp</measType>
+            <measType p="5">pmEbsActiveUeUlMax</measType>
+            <measType p="6">pmEbsActiveUeUlSamp</measType>
+            <measType p="7">pmEbsActiveUeUlSum</measType>
+            <measType p="8">pmEbsActiveUeUlTrueSamp</measType>
+            <measType p="9">pmEbsMacRBSymAvailDl</measType>
+            <measType p="10">pmEbsMacRBSymAvailUl</measType>
+            <measType p="11">pmEbsMacRBSymUtilDlDistr</measType>
+            <measType p="12">pmEbsMacRBSymUtilDlMax</measType>
+            <measType p="13">pmEbsMacRBSymUtilDlPartitionDistr</measType>
+            <measType p="14">pmEbsMacRBSymUtilDlPartitionDistr_PartitionId2</measType>
+            <measType p="15">pmEbsMacRBSymUtilDlPriorityPartitionDistr</measType>
+            <measType p="16">pmEbsMacRBSymUtilDlResidualPartitionDistr</measType>
+            <measType p="17">pmEbsMacRBSymUtilUlDistr</measType>
+            <measType p="18">pmEbsMacRBSymUtilUlPartitionDistr</measType>
+            <measType p="19">pmEbsMacRBSymUtilUlPartitionDistr_PartitionId2</measType>
+            <measType p="20">pmEbsMacRBSymUtilUlPriorityPartitionDistr</measType>
+            <measType p="21">pmEbsMacRBSymUtilUlResidualPartitionDistr</measType>
+            <measType p="22">pmEbsMacTimeDlDrb</measType>
+            <measType p="23">pmEbsMacTimeDlDrb_sst1sd3</measType>
+            <measType p="24">pmEbsMacTimeDlDrb_sst6sd3</measType>
+            <measType p="25">pmEbsMacTimeDlDrb_sst7sd3</measType>
+            <measType p="26">pmEbsMacTimeDlDrb_sst8sd3</measType>
+            <measType p="27">pmEbsMacTimeUlResUe</measType>
+            <measType p="28">pmEbsMacTimeUlResUe_sst1sd3</measType>
+            <measType p="29">pmEbsMacTimeUlResUe_sst6sd3</measType>
+            <measType p="30">pmEbsMacTimeUlResUe_sst7sd3</measType>
+            <measType p="31">pmEbsMacTimeUlResUe_sst8sd3</measType>
+            <measType p="32">pmEbsMacVolDl</measType>
+            <measType p="33">pmEbsMacVolDlDrb</measType>
+            <measType p="34">pmEbsMacVolDlDrb_sst1sd3</measType>
+            <measType p="35">pmEbsMacVolDlDrb_sst6sd3</measType>
+            <measType p="36">pmEbsMacVolDlDrb_sst7sd3</measType>
+            <measType p="37">pmEbsMacVolDlDrb_sst8sd3</measType>
+            <measType p="38">pmEbsMacVolUl</measType>
+            <measType p="39">pmEbsMacVolUlResUe</measType>
+            <measType p="40">pmEbsMacVolUlResUe_sst1sd3</measType>
+            <measType p="41">pmEbsMacVolUlResUe_sst6sd3</measType>
+            <measType p="42">pmEbsMacVolUlResUe_sst7sd3</measType>
+            <measType p="43">pmEbsMacVolUlResUe_sst8sd3</measType>
+            <measValue measObjLdn="ManagedElement=GNB_BNE502,GNBDUFunction=1,NRCellDU=GNB_BNE502_1">
+                <r p="1">1</r>
+                <r p="2">449110</r>
+                <r p="3">449110</r>
+                <r p="4">1800001</r>
+                <r p="5">1</r>
+                <r p="6">1136772</r>
+                <r p="7">1136772</r>
+                <r p="8">1800001</r>
+                <r p="9">4586400000</r>
+                <r p="10">1234803430</r>
+                <r p="11">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="12">5</r>
+                <r p="13">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="14">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="15">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="16">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="17">331,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,566</r>
+                <r p="18">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="19">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="20">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="21">331,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,566</r>
+                <r p="22">8</r>
+                <r p="23">0</r>
+                <r p="24">0</r>
+                <r p="25">0</r>
+                <r p="26">8</r>
+                <r p="27">4541140</r>
+                <r p="28">0</r>
+                <r p="29">0</r>
+                <r p="30">0</r>
+                <r p="31">4541140</r>
+                <r p="32">1478689546</r>
+                <r p="33">48152</r>
+                <r p="34">0</r>
+                <r p="35">0</r>
+                <r p="36">0</r>
+                <r p="37">48152</r>
+                <r p="38">5389154392</r>
+                <r p="39">5389019798</r>
+                <r p="40">0</r>
+                <r p="41">0</r>
+                <r p="42">0</r>
+                <r p="43">5389019798</r>
+            </measValue>
+            <measValue measObjLdn="ManagedElement=GNB_BNE502,GNBDUFunction=1,NRCellDU=GNB_BNE502_2">
+                <r p="1">0</r>
+                <r p="2">0</r>
+                <r p="3">0</r>
+                <r p="4">1800001</r>
+                <r p="5">0</r>
+                <r p="6">0</r>
+                <r p="7">0</r>
+                <r p="8">1800001</r>
+                <r p="9">4586400000</r>
+                <r p="10">1234803430</r>
+                <r p="11">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="12">0</r>
+                <r p="13">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="14">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="15">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="16">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="17">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="18">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="19">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="20">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="21">900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</r>
+                <r p="22">0</r>
+                <r p="23">0</r>
+                <r p="24">0</r>
+                <r p="25">0</r>
+                <r p="26">0</r>
+                <r p="27">0</r>
+                <r p="28">0</r>
+                <r p="29">0</r>
+                <r p="30">0</r>
+                <r p="31">0</r>
+                <r p="32">0</r>
+                <r p="33">0</r>
+                <r p="34">0</r>
+                <r p="35">0</r>
+                <r p="36">0</r>
+                <r p="37">0</r>
+                <r p="38">0</r>
+                <r p="39">0</r>
+                <r p="40">0</r>
+                <r p="41">0</r>
+                <r p="42">0</r>
+                <r p="43">0</r>
+            </measValue>
+        </measInfo>
+    </measData>
+    <fileFooter>
+        <measCollec endTime="2022-06-21T14:15:00+02:00"/>
+    </fileFooter>
+</measCollecFile>

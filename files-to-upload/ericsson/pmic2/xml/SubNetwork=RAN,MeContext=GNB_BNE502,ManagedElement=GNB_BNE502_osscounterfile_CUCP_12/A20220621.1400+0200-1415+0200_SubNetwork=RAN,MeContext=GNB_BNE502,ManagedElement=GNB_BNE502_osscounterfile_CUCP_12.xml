@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="MeasDataCollection.xsl"?>
+<measCollecFile xmlns="http://www.3gpp.org/ftp/specs/archive/32_series/32.435#measCollec">
+    <fileHeader fileFormatVersion="32.435 V10.0" vendorName="Ericsson AB">
+        <fileSender localDn="SubNetwork=RAN,MeContext=GNB_BNE502,ManagedElement=GNB_BNE502" elementType="OSS"/>
+        <measCollec beginTime="2022-06-21T14:00:00+02:00"/>
+    </fileHeader>
+    <measData>
+        <managedElement localDn="SubNetwork=RAN,MeContext=GNB_BNE502,ManagedElement=GNB_BNE502" userLabel="GNB_BNE502" swVersion="CXP9024418/15_R48E15"/>
+        <measInfo>
+            <granPeriod duration="PT900S" endTime="2022-06-21T14:15:00+02:00"/>
+            <repPeriod duration="PT900S"/>
+            <measType p="1">pmEbsPduSessionEstabAtt</measType>
+            <measType p="2">pmEbsPduSessionEstabAtt_sst1sd3</measType>
+            <measType p="3">pmEbsPduSessionEstabAtt_sst6sd3</measType>
+            <measType p="4">pmEbsPduSessionEstabAtt_sst7sd3</measType>
+            <measType p="5">pmEbsPduSessionEstabAtt_sst8sd3</measType>
+            <measType p="6">pmEbsPduSessionEstabSucc</measType>
+            <measType p="7">pmEbsPduSessionEstabSucc_sst1sd3</measType>
+            <measType p="8">pmEbsPduSessionEstabSucc_sst6sd3</measType>
+            <measType p="9">pmEbsPduSessionEstabSucc_sst7sd3</measType>
+            <measType p="10">pmEbsPduSessionEstabSucc_sst8sd3</measType>
+            <measType p="11">pmEbsPduSessionLevelMax</measType>
+            <measType p="12">pmEbsPduSessionLevelSamp</measType>
+            <measType p="13">pmEbsPduSessionLevelSum</measType>
+            <measType p="14">pmEbsPduSessionModifyAtt</measType>
+            <measType p="15">pmEbsPduSessionModifySucc</measType>
+            <measType p="16">pmEbsPduSessionRelAbnormalAmf</measType>
+            <measType p="17">pmEbsPduSessionRelAbnormalAmf_sst1sd3</measType>
+            <measType p="18">pmEbsPduSessionRelAbnormalAmf_sst6sd3</measType>
+            <measType p="19">pmEbsPduSessionRelAbnormalAmf_sst7sd3</measType>
+            <measType p="20">pmEbsPduSessionRelAbnormalAmf_sst8sd3</measType>
+            <measType p="21">pmEbsPduSessionRelAbnormalGnb</measType>
+            <measType p="22">pmEbsPduSessionRelAbnormalGnb_sst1sd3</measType>
+            <measType p="23">pmEbsPduSessionRelAbnormalGnb_sst6sd3</measType>
+            <measType p="24">pmEbsPduSessionRelAbnormalGnb_sst7sd3</measType>
+            <measType p="25">pmEbsPduSessionRelAbnormalGnb_sst8sd3</measType>
+            <measType p="26">pmEbsPduSessionRelNormal</measType>
+            <measType p="27">pmEbsPduSessionRelNormal_sst1sd3</measType>
+            <measType p="28">pmEbsPduSessionRelNormal_sst6sd3</measType>
+            <measType p="29">pmEbsPduSessionRelNormal_sst7sd3</measType>
+            <measType p="30">pmEbsPduSessionRelNormal_sst8sd3</measType>
+            <measValue measObjLdn="ManagedElement=GNB_BNE502,GNBCUCPFunction=1,NRCellCU=GNB_BNE502_1">
+                <r p="1">0</r>
+                <r p="2">0</r>
+                <r p="3">0</r>
+                <r p="4">0</r>
+                <r p="5">0</r>
+                <r p="6">0</r>
+                <r p="7">0</r>
+                <r p="8">0</r>
+                <r p="9">0</r>
+                <r p="10">0</r>
+                <r p="11">1</r>
+                <r p="12">180</r>
+                <r p="13">180</r>
+                <r p="14">0</r>
+                <r p="15">0</r>
+                <r p="16">0</r>
+                <r p="17">0</r>
+                <r p="18">0</r>
+                <r p="19">0</r>
+                <r p="20">0</r>
+                <r p="21">0</r>
+                <r p="22">0</r>
+                <r p="23">0</r>
+                <r p="24">0</r>
+                <r p="25">0</r>
+                <r p="26">0</r>
+                <r p="27">0</r>
+                <r p="28">0</r>
+                <r p="29">0</r>
+                <r p="30">0</r>
+            </measValue>
+            <measValue measObjLdn="ManagedElement=GNB_BNE502,GNBCUCPFunction=1,NRCellCU=GNB_BNE502_2">
+                <r p="1">0</r>
+                <r p="2">0</r>
+                <r p="3">0</r>
+                <r p="4">0</r>
+                <r p="5">0</r>
+                <r p="6">0</r>
+                <r p="7">0</r>
+                <r p="8">0</r>
+                <r p="9">0</r>
+                <r p="10">0</r>
+                <r p="11">0</r>
+                <r p="12">180</r>
+                <r p="13">0</r>
+                <r p="14">0</r>
+                <r p="15">0</r>
+                <r p="16">0</r>
+                <r p="17">0</r>
+                <r p="18">0</r>
+                <r p="19">0</r>
+                <r p="20">0</r>
+                <r p="21">0</r>
+                <r p="22">0</r>
+                <r p="23">0</r>
+                <r p="24">0</r>
+                <r p="25">0</r>
+                <r p="26">0</r>
+                <r p="27">0</r>
+                <r p="28">0</r>
+                <r p="29">0</r>
+                <r p="30">0</r>
+            </measValue>
+            <measValue measObjLdn="ManagedElement=GNB_BNE502,GNBCUCPFunction=1,NRCellCU=GNB_BNE502_3">
+                <r p="1">0</r>
+                <r p="2">0</r>
+                <r p="3">0</r>
+                <r p="4">0</r>
+                <r p="5">0</r>
+                <r p="6">0</r>
+                <r p="7">0</r>
+                <r p="8">0</r>
+                <r p="9">0</r>
+                <r p="10">0</r>
+                <r p="11">0</r>
+                <r p="12">180</r>
+                <r p="13">0</r>
+                <r p="14">0</r>
+                <r p="15">0</r>
+                <r p="16">0</r>
+                <r p="17">0</r>
+                <r p="18">0</r>
+                <r p="19">0</r>
+                <r p="20">0</r>
+                <r p="21">0</r>
+                <r p="22">0</r>
+                <r p="23">0</r>
+                <r p="24">0</r>
+                <r p="25">0</r>
+                <r p="26">0</r>
+                <r p="27">0</r>
+                <r p="28">0</r>
+                <r p="29">0</r>
+                <r p="30">0</r>
+            </measValue>
+        </measInfo>
+    </measData>
+    <fileFooter>
+        <measCollec endTime="2022-06-21T14:15:00+02:00"/>
+    </fileFooter>
+</measCollecFile>

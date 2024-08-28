@@ -1,0 +1,88 @@
+#
+# COPYRIGHT Ericsson 2021
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+#Metrics related configurations
+management.endpoint.metrics.enabled: true
+management.endpoints.web.exposure.include: "*"
+management.endpoint.prometheus.enabled: true
+management.metrics.export.prometheus.enabled: true
+management.metrics.web.server.auto-time-requests: true
+
+#opentracing.jaeger.enabled: true
+
+server:
+  port: ${SPRING_SSL_PORT:8081}
+  ssl:
+    enabled: ${SPRING_SSL_ENABLED:true}
+    key-store-type: ${SPRING_SSL_KEYSTORETYPE:PKCS12}
+    key-store: ${SPRING_SSL_KEYSTORELOCATION:src/main/resources/keystore/fnsStubCertificate.p12}
+    key-store-password: ${SPRING_SSL_KEYSTOREPASSWORD:changeit}
+    key-alias: ${SPRING_SSL_KEYALIAS:fnsStub}
+
+spring:
+  http:
+    port: ${SPRING_HTTP_PORT:8080}
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  jmx:
+    enabled: true
+
+sftp:
+  host: ${SPRING_SFTP_HOST:10.63.138.20}
+  port: ${SPRING_SFTP_PORT:31146}
+  user: ${SPRING_SFTP_USER:demo}
+  password: ${SPRING_SFTP_PASSWORD:demo}
+  permissions: ${SPRING_SFTP_PERMISSIONS:0755}
+  numberOfNodes:
+    pmEvent5g: ${SPRING_SFTP_NUMBER_OF_NODES_PM_EVENT_5G:10}
+    pmEvent4g: ${SPRING_SFTP_NUMBER_OF_NODES_PM_EVENT_4G:0}
+    fileTrans: ${SPRING_SFTP_NUMBER_OF_NODES_FILE_TRANS:10}
+    fileTransEbs: ${SPRING_SFTP_NUMBER_OF_NODES_FILE_TRANS_EBS:0}
+    fileTransCore: ${SPRING_SFTP_NUMBER_OF_NODES_FILE_TRANS_CORE:0}
+  ropPeriodMinutes: ${SPRING_SFTP_ROP_PERIOD_MINUTES:15}
+  retentionPeriodMinutes: ${SPRING_SFTP_RETENTION_PERIOD_MINUTES:60}
+  remote:
+    directory: ${SPRING_SFTP_REMOTE_BASEDIRECTORY:/sftp/}
+  connection:
+    timeoutInMs: ${SPRING_SFTP_CONNECTION_TIMEOUTINMS:10000}
+    retryCountMax:
+      atStartup : ${SPRING_SFTP_CONNECTION_RETRYCOUNTMAX_ATSTARTUP:10}
+      running : ${SPRING_SFTP_CONNECTION_RETRYCOUNTMAX_RUNNING:5}
+manualModeGenerate:
+  retryCountMax: ${SPRING_MANUAL_MODE_GENERATE_RETRY_COUNT_MAX:30}
+  backoffInMs: ${SPRING_MANUAL_MODE_GENERATE_BACKOFF_IN_MS:10000}
+
+endpoints.health.sensitive: false
+info.app.name: '@name@'
+info.app.description: "Ericsson OSS ENM File Lookup Service Stub"
+info.app.version: '@version@'
+info.app.legal: "COPYRIGHT Ericsson 2021 -
+ The copyright to the computer program(s) herein is the property of
+ Ericsson Inc. The programs may be used and/or copied only with written
+ permission from Ericsson Inc. or in accordance with the terms and
+ conditions stipulated in the agreement/contract under which the
+ program(s) have been supplied."
+
+#See more details about pattern layout: https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
+#See more details about logging.pattern.level: https://docs.spring.io/spring-boot/docs/2.5.2/reference/html/features.html#features.logging.custom-log-configuration
+#logging.pattern.level: "%5p [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}][%X{userName}]"
+
+#Set the stubrunner credentials:
+#stubrunner.username: <LAN SIGNUM ID>
+#stubrunner.password: <LAN encripted PWD or JFrog API Key>
+stubrunner.username: ${SELI_ARTIFACTORY_REPO_USER}
+stubrunner.password: ${SELI_ARTIFACTORY_REPO_PASS}

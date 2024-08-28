@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ COPYRIGHT Ericsson 2021
+ ~
+ ~
+ ~
+ ~ The copyright to the computer program(s) herein is the property of
+ ~
+ ~ Ericsson Inc. The programs may be used and/or copied only with written
+ ~
+ ~ permission from Ericsson Inc. or in accordance with the terms and
+ ~
+ ~ conditions stipulated in the agreement/contract under which the
+ ~
+ ~ program(s) have been supplied.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.5.12</version>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=950769  -->
+    <relativePath />
+  </parent>
+  <groupId>com.ericsson.oss.adc</groupId>
+  <artifactId>eric-oss-file-notification-enm-stub</artifactId>
+  <version>1.0.76-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>eric-oss-file-notification-enm-stub</name>
+
+  <scm>
+    <developerConnection>${ericsson.scm.url}</developerConnection>
+    <connection>${ericsson.scm.url}</connection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <ericsson.scm.url>
+      scm:git:[fetch=]ssh://gerrit.ericsson.se:29418/OSS/com.ericsson.oss.adc/eric-oss-file-notification-enm-stub[push=]ssh://gerrit.ericsson.se:29418/OSS/com.ericsson.oss.adc/eric-oss-file-notification-enm-stub
+    </ericsson.scm.url>
+
+    <log4j2.version>2.16.0</log4j2.version>
+    <!-- For CVE-2021-44228 against the log4j-core jar. Can be removed when spring-boot-starter >=2.5.8 or >=2.6.2 is used -->
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=993415 -->
+
+    <!-- 3PP Versions -->
+    <version.jackson-databind-nullable>0.2.1</version.jackson-databind-nullable>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=932363  -->
+    <version.jaeger-client>1.1.0</version.jaeger-client>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=927463 -->
+    <version.logstash-logback-encoder>6.5</version.logstash-logback-encoder>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=947799 -->
+    <version.lombok>1.18.16</version.lombok>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=944295 -->
+    <version.micrometer>1.6.2</version.micrometer>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=951538 -->
+    <version.openjdk>11</version.openjdk>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=947375 -->
+    <version.spring-cloud>2020.0.3</version.spring-cloud>
+    <!-- No entry in Bazaar. FOSS Required -->
+    <version.springfox>3.0.0</version.springfox>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=943461 -->
+    <version.swagger-annotations>1.6.2</version.swagger-annotations>
+    <!-- https://bazaar.internal.ericsson.com/b-view-component.php?componentid=942772 -->
+
+    <!-- Ericsson Dependency Versions -->
+    <version.eric-common-logging>1.0.21</version.eric-common-logging>
+    <version.enm-checkstyle-module>1.1.103</version.enm-checkstyle-module>
+
+    <!-- Build Dependencies -->
+    <version.checkstyle-tool>8.41</version.checkstyle-tool>
+    <version.maven-checkstyle-plugin>3.1.2</version.maven-checkstyle-plugin>
+    <version.openapi-generator-maven-plugin>5.0.0</version.openapi-generator-maven-plugin>
+    <version.maven-sortpom-plugin>2.13.1</version.maven-sortpom-plugin>
+    <version.maven-release-plugin>2.4.2</version.maven-release-plugin>
+    <version.maven-scm-provider-gitexe>1.8.1</version.maven-scm-provider-gitexe>
+
+    <!-- Test Dependencies -->
+    <version.fake-sftp-server-lambda>2.0.0</version.fake-sftp-server-lambda>
+    <version.license-maven-plugin>3.0</version.license-maven-plugin>
+    <version.sonar-maven-plugin>3.8.0.2131</version.sonar-maven-plugin>
+    <!-- JaCoCo plugin for Java Code Coverage -->
+    <version.jcoco-maven.plugin>0.8.5</version.jcoco-maven.plugin>
+    <!-- Minimum ratio or percentage of instructions to be covered, used by
+            JaCoCo plugin. Industry standard is 0.8 or 80% which allows at least 80%
+            of the code to be covered by the test cases. -->
+    <jacoco-maven-plugin.coveredratio.minimum>0.01</jacoco-maven-plugin.coveredratio.minimum>
+    <version.spring-cloud-contract>3.1.5</version.spring-cloud-contract>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${version.spring-cloud}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin -->
+      <dependency>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${version.maven-checkstyle-plugin}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.integration</groupId>
+      <artifactId>spring-integration-sftp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>${version.jackson-databind-nullable}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jaegertracing</groupId>
+      <artifactId>jaeger-client</artifactId>
+      <version>${version.jaeger-client}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>${version.logstash-logback-encoder}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${version.lombok}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-core</artifactId>
+      <version>${version.micrometer}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+      <version>${version.micrometer}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jersey</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-sleuth</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>${version.springfox}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger-ui</artifactId>
+      <version>${version.springfox}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>${version.swagger-annotations}</version>
+    </dependency>
+
+    <!-- Ericsson Dependencies -->
+    <dependency>
+      <groupId>com.ericsson.oss.orchestration.eo</groupId>
+      <artifactId>eric-common-logging</artifactId>
+      <version>${version.eric-common-logging}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>3.8.0</version>
+    <scope>test</scope>
+</dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>${version.license-maven-plugin}</version>
+          <configuration>
+            <header>license/copyright-2021.txt</header>
+            <validHeaders>
+              <validHeader>license/copyright-2020.txt</validHeader>
+            </validHeaders>
+            <excludes>
+              <exclude>.bob/*</exclude>
+              <exclude>.bob*/</exclude>
+              <exclude>k8s-logs/*</exclude>
+              <exclude>**/.helmignore</exclude>
+              <exclude>**/*.html</exclude>
+              <exclude>**/_helpers.tpl</exclude>
+              <exclude>**/*.tgz</exclude>
+              <exclude>**/VERSION*</exclude>
+              <exclude>**/*.repo</exclude>
+              <exclude>license/copyright*</exclude>
+              <exclude>design-rule-check-report*</exclude>
+              <exclude>helm-install-dry-run.log</exclude>
+              <exclude>*artifact.properties</exclude>
+              <exclude>**/rest_conversion_log.txt</exclude>
+              <exclude>**/rest2html*.zip</exclude>
+              <exclude>settings.xml</exclude>
+            </excludes>
+            <headerDefinitions>
+              <headerDefinition>./license/javaHeaderDefinition.xml</headerDefinition>
+              <headerDefinition>./license/xmlHeaderDefinition.xml</headerDefinition>
+            </headerDefinitions>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${version.maven-checkstyle-plugin}</version>
+          <configuration>
+            <consoleOutput>true</consoleOutput>
+            <logViolationsToConsole>true</logViolationsToConsole>
+            <configLocation>${project.basedir}/src/main/resources/checkstyle.xml</configLocation>
+            <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+            <violationSeverity>warning</violationSeverity>
+            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+            <encoding>UTF-8</encoding>
+            <consoleOutput>true</consoleOutput>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${version.checkstyle-tool}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.ericsson.cds</groupId>
+              <artifactId>checkstyle-module</artifactId>
+              <version>${version.enm-checkstyle-module}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.github.ekryd.sortpom</groupId>
+              <artifactId>sortpom-maven-plugin</artifactId>
+              <version>${version.maven-sortpom-plugin}</version>
+              <type>maven-plugin</type>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>${version.sonar-maven-plugin}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${version.openapi-generator-maven-plugin}</version>
+        <executions>
+          <execution>
+            <id>1</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/v1/eric-oss-file-notification-enm-stub-openapi.yaml</inputSpec>
+              <generatorName>html</generatorName>
+              <output>src/main/resources/v1</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>2</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/v1/eric-oss-file-notification-enm-stub-openapi.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <modelNamePrefix>eric-oss-file-notification-enm-stub</modelNamePrefix>
+              <configOptions>
+                <generateSupportingFiles>true</generateSupportingFiles>
+                <sourceFolder>src/java/main</sourceFolder>
+                <dateLibrary>java8</dateLibrary>
+                <java8>true</java8>
+                <library>spring-mvc</library>
+                <interfaceOnly>true</interfaceOnly>
+                <skipOverwrite>false</skipOverwrite>
+                <useTags>true</useTags>
+                <useBeanValidation>true</useBeanValidation>
+              </configOptions>
+              <apiPackage>com.ericsson.oss.adc.api</apiPackage>
+              <modelPackage>com.ericsson.oss.adc.api.model</modelPackage>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.artifactId}</artifactId>
+              <artifactVersion>${project.version}</artifactVersion>
+              <environmentVariables>
+                <enablePostProcessFile>true</enablePostProcessFile>
+              </environmentVariables>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+        <version>${version.spring-cloud-contract}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <baseClassForTests>com.ericsson.oss.adc.api.contract.SampleApiBase</baseClassForTests>
+        </configuration>
+      </plugin>
+      <!-- JaCoCo plugin for Java Code Coverage -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${version.jcoco-maven.plugin}</version>
+        <configuration>
+          <append>true</append>
+          <excludes>
+            <exclude>**/api/*.*</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>test</phase>
+            <!-- JaCoCo uses a set of different counters to calculate coverage
+                            metrics -->
+            <!-- Check configuration used to specify rules on element types (BUNDLE,
+                            PACKAGE, CLASS, SOURCEFILE or METHOD) with a list of limits. Each limit applies
+                            to a certain counter (INSTRUCTION, LINE, BRANCH, COMPLEXITY, METHOD, CLASS)
+                            and defines a minimum or maximum for the corresponding value (TOTALCOUNT,
+                            COVEREDCOUNT, MISSEDCOUNT, COVEREDRATIO, MISSEDRATIO). A limit ratio may
+                            optionally be declared as a percentage where 0.80 and 80% represent the same
+                            value, the value must end with %. -->
+            <configuration>
+              <rules>
+                <rule implementation="org.jacoco.maven.RuleConfiguration">
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit implementation="org.jacoco.report.check.Limit">
+                      <counter>INSTRUCTION</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>${jacoco-maven-plugin.coveredratio.minimum}</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+              <excludes>
+                <exclude>**/api/*.*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>agent-for-ut</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/api/*.*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>agent-for-it</id>
+            <goals>
+              <goal>prepare-agent-integration</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/api/*.*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jacoco-site</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <phase>verify</phase>
+            <configuration>
+              <excludes>
+                <exclude>**/api/*.*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>${version.maven-release-plugin}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>${version.maven-scm-provider-gitexe}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- JaCoCo plugin for Java Code Coverage -->
+    </plugins>
+  </build>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>snapshot</id>
+      <name>armseligic-snapshot</name>
+      <url>https://arm.seli.gic.ericsson.se/artifactory/proj-eric-oss-dev-local</url>
+    </snapshotRepository>
+    <repository>
+      <id>release</id>
+      <name>armseligic-release</name>
+      <url>https://arm.seli.gic.ericsson.se/artifactory/proj-eric-oss-release-local</url>
+    </repository>
+  </distributionManagement>
+
+</project>

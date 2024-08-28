@@ -1,0 +1,39 @@
+#
+# COPYRIGHT Ericsson 2021
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+{{- if .Values.global }}
+  {{- if .Values.global.security }}
+    {{- if .Values.global.security.tls }}
+      {{- if .Values.global.security.tls.enabled }}
+apiVersion: siptls.sec.ericsson.com/v1
+kind: InternalUserCA
+metadata:
+  name: {{ template "eric-oss-file-notification-enm-stub.name" . }}-internal-user-ca
+  labels:
+    {{- include "eric-oss-file-notification-enm-stub.labels" . | nindent 4 }}
+  annotations:
+    {{- include "eric-oss-file-notification-enm-stub.annotations" . | nindent 4 }}
+spec:
+  kubernetes:
+    generatedSecretName: {{ template "eric-oss-file-notification-enm-stub.name" . }}-internal-ca-secret
+    certificateName: caCert.pem
+  certificate:
+    subject:
+      cn: {{ template "eric-oss-file-notification-enm-stub.name" . }}-internal-user-ca
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
